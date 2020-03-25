@@ -15,6 +15,7 @@ class User(SqlAlchemyBase):
     position = sqlalchemy.Column(sqlalchemy.String)
     speciality = sqlalchemy.Column(sqlalchemy.String)
     address = sqlalchemy.Column(sqlalchemy.String)
-    email = sqlalchemy.Column(sqlalchemy.String, unique=True)
+    email = sqlalchemy.Column(sqlalchemy.String, sqlalchemy.ForeignKey("users.id"), unique=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime)
+
