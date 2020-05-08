@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="/../static/css/style.css" />
+</head>
+<h1>Works log</h1>
+{% for item in jobs%}
+    <h2>Action # {{item.id}}</h2>
+    <table>
+        <tr>
+            <td class="col1">Title of activity</td>
+            <td class="col1">Team leader</td>
+            <td class="col1">Duration</td>
+            <td class="col1">List of collaborators</td>
+            <td class="col1">is finished</td>
+        </tr>
+        <tr>
+            <td class="col2">{{item.job}}</td>
+            <td class="col2">{{ users.filter(User.id == item.team_leader).first().surname }} {{ users.filter(User.id == item.team_leader).first().name }}</td>
+            <td class="col2">{{item.work_size}} hours</td>
+            <td class="col2">{{item.collaborators}}</td>
+            <td class="col2">{% if item.is_finished %}
+                                Is finished
+                                {% else %}
+                                Is not finished
+                                {% endif %}
+                                </td>
+        </tr>
+    </table>
+{% endfor %}
+{% endblock %}
