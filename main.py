@@ -4,7 +4,7 @@ from data import db_session
 from data.users import User
 from data.jobs import Jobs
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, SubmitField, BooleanField, StringField
+from wtforms import PasswordField, SubmitField, BooleanField, StringField, IntegerField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired
 
@@ -38,6 +38,14 @@ class RegisterForm(FlaskForm):
     speciality = StringField('Speciality', validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+
+class JobForm(FlaskForm):
+    job = StringField('Job', validators=[DataRequired()])
+    team_leader = StringField('Team leader (id)', validators=[DataRequired()])
+    work_size = IntegerField('Work size (hours)', validators=[DataRequired()])
+    collaborators = StringField('Collaborators (id)', validators=[DataRequired()])
+    submit = SubmitField('Применить')
 
 
 @app.route("/")
@@ -96,6 +104,23 @@ def reqister():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/add_job')
+@login_required
+def add_job():
+    form = JobForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        jobs = Jobs()
+        jobs.job = form.job.data
+        jobs.team_leader = form.team_leader.data
+        jobs.work_size = form.work_size.data
+        jobs.collaborators = form.collaborators.data
+        session.merge(jobs)
+        session.commit()
+        return redirect('/')
+    return render_template('news.html', title='Добавление новости', form=form)
 
 
 def main():
