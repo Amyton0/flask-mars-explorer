@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="/../static/css/style.css" />
+</head>
+<h1>List of departments</h1>
+<a href="/" class="btn btn-secondary">Back to Jobs</a>
+{% if current_user.is_authenticated %}
+        <a href="/add_department" class="btn btn-secondary">Add department</a>
+    {% endif %}
+{% for item in departments%}
+    <h2>Action # {{item.id}}</h2>
+    <table>
+        <tr>
+            <td class="col1">Title of department</td>
+            <td class="col1">Chief</td>
+            <td class="col1">Members</td>
+            <td class="col1">Department email</td>
+        </tr>
+        <tr>
+            <td class="col2">{{item.title}}</td>
+            <td class="col2">{{ users.filter(User.id == item.chief).first().surname }} {{ users.filter(User.id == item.chief).first().name }}</td>
+            <td class="col2">{{item.members}}</td>
+            <td class="col2">{{item.email}}</td>
+        </tr>
+    </table>
+{% if current_user.is_authenticated and current_user.id == item.chief %}
+<div>
+        <a href="/edit_department/{{ item.id }}" class="btn btn-warning">Edit department</a>
+        <a href="/delete_department/{{ item.id }}" class="btn btn-danger">Delete department</a>
+    </div>
+{% elif current_user.is_authenticated and current_user.id == 1 %}
+<div>
+        <a href="/edit_department/{{ item.id }}" class="btn btn-warning">Edit department</a>
+        <a href="/delete_department/{{ item.id }}" class="btn btn-danger">Delete department</a>
+    </div>
+{% endif %}
+{% endfor %}
+{% endblock %}
