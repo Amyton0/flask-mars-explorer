@@ -5,6 +5,9 @@
     <link rel="stylesheet" type="text/css" href="/../static/css/style.css" />
 </head>
 <h1>Works log</h1>
+{% if current_user.is_authenticated %}
+        <a href="add_job" class="btn btn-secondary">Add job</a>
+    {% endif %}
 {% for item in jobs%}
     <h2>Action # {{item.id}}</h2>
     <table>
@@ -28,5 +31,16 @@
                                 </td>
         </tr>
     </table>
+{% if current_user.is_authenticated and current_user.id == item.team_leader %}
+<div>
+        <a href="/edit_job/{{ item.id }}" class="btn btn-warning">Edit job</a>
+        <a href="/delete_job/{{ item.id }}" class="btn btn-danger">Delete job</a>
+    </div>
+{% elif current_user.is_authenticated and current_user.id == 1 %}
+<div>
+        <a href="/edit_job/{{ item.id }}" class="btn btn-warning">Edit job</a>
+        <a href="/delete_job/{{ item.id }}" class="btn btn-danger">Delete job</a>
+    </div>
+{% endif %}
 {% endfor %}
 {% endblock %}
